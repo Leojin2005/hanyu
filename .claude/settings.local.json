@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /d/hanzihero/server -type f \\\\\\(-name *.js -o -name *.json \\\\\\) -not -path */node_modules/*)"
+    ]
+  }
+}
