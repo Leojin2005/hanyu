@@ -14,8 +14,14 @@ const app = express();
 
 // Security & parsing
 app.use(helmet());
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://hanzihero-demo.web.app',
+  'https://hanzihero-demo-387d4.web.app',
+  process.env.CLIENT_URL,
+].filter(Boolean);
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: (origin, cb) => cb(null, !origin || allowedOrigins.includes(origin)),
   credentials: true,
 }));
 app.use(express.json({ limit: '10mb' }));
