@@ -16,15 +16,26 @@ const getLeaderboard = async (req, res) => {
       .sort(sortField)
       .limit(Number(limit));
 
-    // Find current user's rank
+    // Calculate ranking for returned users
+    const rankedUsers = users.map((u, index) => ({
+      ...u.toObject(),
+      rank: index + 1,
+    }));
+
+    // Find current user's rank (tie-safe with _id as stable tiebreaker)
     const currentUser = req.user;
+    const userValue = currentUser[type === 'xp' ? 'xp' : 'streak'];
+    const valueField = type === 'xp' ? 'xp' : 'streak';
     const userRank = await User.countDocuments({
       role: 'user',
-      [type === 'xp' ? 'xp' : 'streak']: { $gt: currentUser[type === 'xp' ? 'xp' : 'streak'] },
+      $or: [
+        { [valueField]: { $gt: userValue } },
+        { [valueField]: userValue, _id: { $lt: currentUser._id } },
+      ],
     }) + 1;
 
     res.json({
-      leaderboard: users,
+      leaderboard: rankedUsers,
       currentUserRank: userRank,
     });
   } catch (err) {

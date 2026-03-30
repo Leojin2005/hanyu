@@ -56,7 +56,7 @@ export default function Leaderboard() {
               }`}
           >
             <span className="text-lg font-bold w-8 text-center">
-              {i < 3 ? medals[i] : i + 1}
+              {u.rank <= 3 ? medals[u.rank - 1] : u.rank}
             </span>
             <div className="w-10 h-10 rounded-full bg-gray-200
                             overflow-hidden flex-shrink-0">
