@@ -108,6 +108,17 @@ const refreshToken = async (req, res) => {
     await user.save();
 
     res.json({
+      user: {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        currentLevel: user.currentLevel,
+        xp: user.xp,
+        level: user.level,
+        streak: user.streak,
+        avatar: user.avatar,
+        badges: user.badges,
+      },
       accessToken: newAccessToken,
       refreshToken: newRefreshToken,
     });

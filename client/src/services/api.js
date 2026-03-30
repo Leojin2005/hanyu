@@ -36,7 +36,8 @@ api.interceptors.response.use(
 
       try {
         const refreshToken = injectedStore.getState().auth.refreshToken;
-        const { data } = await axios.post('/api/auth/refresh', { refreshToken });
+        const baseURL = import.meta.env.VITE_API_URL || '/api';
+        const { data } = await axios.post(`${baseURL}/auth/refresh`, { refreshToken });
         injectedStore.dispatch(setCredentials({
           accessToken: data.accessToken,
           refreshToken: data.refreshToken,

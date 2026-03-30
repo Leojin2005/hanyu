@@ -2,6 +2,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { authService } from '../services/authService';
 
+const BASE_URL = import.meta.env.VITE_API_URL || '/api';
+
 const initialState = {
   user: null,
   accessToken: null,
@@ -41,7 +43,7 @@ export const restoreSession = createAsyncThunk(
     const refreshToken = getState().auth.refreshToken;
     if (!refreshToken) return rejectWithValue('No refresh token');
     try {
-      const { data } = await axios.post('/api/auth/refresh', { refreshToken });
+      const { data } = await axios.post(`${BASE_URL}/auth/refresh`, { refreshToken });
       return data;
     } catch {
       return rejectWithValue('Session expired');
